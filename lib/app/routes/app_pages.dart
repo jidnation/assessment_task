@@ -35,6 +35,7 @@ class AppPages {
     GetPage(
       name: _Paths.MAP,
       page: () => MapView(),
+      // page: () => MapView(),
       binding: MapBinding(),
     ),
   ];

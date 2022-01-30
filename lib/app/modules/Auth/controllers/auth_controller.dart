@@ -40,9 +40,10 @@ class AuthController extends GetxController {
       User? _user = response.user;
       Get.snackbar('Login Status', 'Login Successful', colorText: Colors.green);
       Get.find<WrapperController>().setUser(_user!.uid);
-      Get.put(MapController()).getPosition;
-      print(' from signin: ${Get.find<MapController>().currentPosition}');
-      update();
+      final mapControl = Get.put(MapController());
+      await mapControl.getPosition().then((value) {
+        Get.offAndToNamed('/map', arguments: value);
+      });
     } catch (e) {
       Get.snackbar('Login Status', 'Login Failed', colorText: Colors.red);
       update();
@@ -90,16 +91,17 @@ class AuthController extends GetxController {
         accessToken: auth.accessToken,
         idToken: auth.idToken,
       );
-      await FirebaseAuth.instance.signInWithCredential(cred).whenComplete(() {
+      await FirebaseAuth.instance
+          .signInWithCredential(cred)
+          .whenComplete(() async {
         Get.find<WrapperController>().setUser(user!.displayName.toString());
-        Get.put(MapController()).getPosition;
-        Get.offAndToNamed('./map');
-        print(user.email.toString());
-        print(user.displayName.toString());
-        print(user.photoUrl.toString());
+        Get.snackbar('Login Status', 'Login Successful',
+            colorText: Colors.green);
+        final mapControl = Get.put(MapController());
+        await mapControl.getPosition().then((value) {
+          Get.offAndToNamed('/map', arguments: value);
+        });
       });
-      Get.snackbar('Login Status', 'Login Successful', colorText: Colors.green);
-      Get.offAndToNamed('./map');
     } catch (e) {
       print(e.toString());
     }

@@ -7,26 +7,24 @@ class MapController extends GetxController {
   /// Determine the current position of the device.
   ///
   /// I maked some variable static so that they will visible from other pages
-  final Rx<Position> currentPosition = Position(
-          longitude: 0.0,
-          latitude: 0.0,
-          timestamp: DateTime.now(),
-          accuracy: 0,
-          altitude: 0,
-          heading: 0,
-          speed: 0,
-          speedAccuracy: 0)
-      .obs;
+  // final Rx<Position> currentPosition = Position(
+  //         longitude: 0.0,
+  //         latitude: 0.0,
+  //         timestamp: DateTime.now(),
+  //         accuracy: 0,
+  //         altitude: 0,
+  //         heading: 0,
+  //         speed: 0,
+  //         speedAccuracy: 0)
+  //     .obs;
   static final Rx<LatLng> location = LatLng(0, 0).obs;
-  final RxDouble lat = 0.0.obs;
-  final RxDouble lng = 0.0.obs;
   final Rx<CameraPosition> userLocation =
       CameraPosition(target: location.value).obs;
 
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
 
-  getPosition() async {
+  Future<Position> getPosition() async {
     bool isServiceEnabled;
     LocationPermission permission;
 
@@ -51,19 +49,20 @@ class MapController extends GetxController {
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      Get.snackbar('NOTICE',
-          'Location permissions are permanently denied, we cannot request permissions\nEnable app to use this feacture',
+      Get.snackbar(
+          'NOTICE',
+          'Location permissions are permanently denied, we cannot request permissions\n'
+              'Enable app to use this feacture',
           colorText: Colors.amber);
     }
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    currentPosition.value = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition();
+  }
 
-    lat.value = currentPosition.value.latitude;
-    lng.value = currentPosition.value.longitude;
-    update();
+  updateValue() async {
+    getPosition();
   }
 
   @override

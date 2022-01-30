@@ -7,19 +7,20 @@ class MapController extends GetxController {
   /// Determine the current position of the device.
   ///
   /// I maked some variable static so that they will visible from other pages
-  // final Rx<Position> currentPosition = Position(
-  //         longitude: 0.0,
-  //         latitude: 0.0,
-  //         timestamp: DateTime.now(),
-  //         accuracy: 0,
-  //         altitude: 0,
-  //         heading: 0,
-  //         speed: 0,
-  //         speedAccuracy: 0)
-  //     .obs;
-  static final Rx<LatLng> location = LatLng(0, 0).obs;
-  final Rx<CameraPosition> userLocation =
-      CameraPosition(target: location.value).obs;
+
+  final Rx<LatLng> location = LatLng(0, 0).obs;
+  final Rx<Position> userPosition = Position(
+          longitude: 0,
+          latitude: 0,
+          timestamp: DateTime.now(),
+          accuracy: 0,
+          altitude: 0,
+          heading: 0,
+          speed: 0,
+          speedAccuracy: 0)
+      .obs;
+  // final Rx<CameraPosition> userLocation =
+  //     CameraPosition(target: location.value).obs;
 
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
@@ -43,7 +44,7 @@ class MapController extends GetxController {
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again
-        Get.snackbar('NOTICE', 'Permissioned denied!. ', colorText: Colors.red);
+        Get.snackbar('NOTICE', 'Permission denied!. ', colorText: Colors.red);
       }
     }
 
@@ -52,7 +53,7 @@ class MapController extends GetxController {
       Get.snackbar(
           'NOTICE',
           'Location permissions are permanently denied, we cannot request permissions\n'
-              'Enable app to use this feacture',
+              'Enable app to use this feature',
           colorText: Colors.amber);
     }
 
@@ -62,14 +63,17 @@ class MapController extends GetxController {
   }
 
   updateValue() async {
-    getPosition();
+    print('printing 1: ${userPosition.value}, location: ${location.value}');
+    userPosition.value = await getPosition();
+    location.value =
+        LatLng(userPosition.value.latitude, userPosition.value.longitude);
+    print('printing 2: ${userPosition.value}, location: ${location.value}');
+    update();
   }
 
   @override
   void onInit() {
-    print('i am here');
-    getPosition();
-    print('Get position is called');
+    updateValue();
     super.onInit();
   }
 

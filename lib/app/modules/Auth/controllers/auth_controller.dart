@@ -97,10 +97,6 @@ class AuthController extends GetxController {
         Get.find<WrapperController>().setUser(user!.displayName.toString());
         Get.snackbar('Login Status', 'Login Successful',
             colorText: Colors.green);
-        final mapControl = Get.put(MapController());
-        await mapControl.getPosition().then((value) {
-          Get.offAndToNamed('/map', arguments: value);
-        });
       });
     } catch (e) {
       print(e.toString());
@@ -124,5 +120,10 @@ class AuthController extends GetxController {
       }
       return null;
     }
+  }
+
+  @override
+  void onClose() {
+    Get.put(MapController(), permanent: true);
   }
 }

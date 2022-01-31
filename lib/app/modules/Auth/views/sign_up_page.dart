@@ -56,11 +56,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       return ElevatedButton(
                         onPressed: () {
                           if (_sFormKey.currentState!.validate()) {
-                            _auth.signInWithEmailAndPassword(
+                            _auth.registerWithEmailAndPassword(
                                 _auth.email.value, _auth.password.value);
                           }
                         },
-                        child: Text('Log In',
+                        child: Text('Register',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,

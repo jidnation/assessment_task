@@ -17,17 +17,19 @@ class MapViewState extends State<MapView> {
       Get.find<MapController>().location.value;
   final CameraPosition _kGooglePlex = CameraPosition(
     target: userCurrentPosition,
-    zoom: 15,
+    zoom: 17.546,
   );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //This widget render the google map to the screen
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
+        myLocationEnabled: true,
       ),
     );
   }

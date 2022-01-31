@@ -40,10 +40,7 @@ class AuthController extends GetxController {
       User? _user = response.user;
       Get.snackbar('Login Status', 'Login Successful', colorText: Colors.green);
       Get.find<WrapperController>().setUser(_user!.uid);
-      final mapControl = Get.put(MapController());
-      await mapControl.getPosition().then((value) {
-        Get.offAndToNamed('/map', arguments: value);
-      });
+      Get.offAndToNamed('/wrapper');
     } catch (e) {
       Get.snackbar('Login Status', 'Login Failed', colorText: Colors.red);
       update();
@@ -97,6 +94,7 @@ class AuthController extends GetxController {
         Get.find<WrapperController>().setUser(user!.displayName.toString());
         Get.snackbar('Login Status', 'Login Successful',
             colorText: Colors.green);
+        Get.offAndToNamed('/wrapper');
       });
     } catch (e) {
       print(e.toString());

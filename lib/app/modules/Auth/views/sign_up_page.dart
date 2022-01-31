@@ -10,13 +10,13 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-late GlobalKey<FormState> _formKey;
+late GlobalKey<FormFieldState> _sFormKey;
 
 class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     super.initState();
-    _formKey = GlobalKey<FormState>();
+    _sFormKey = GlobalKey<FormFieldState>();
   }
 
   @override
@@ -44,73 +44,72 @@ class _SignUpPageState extends State<SignUpPage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
                 ),
-                child: Column(children: [
-                  const Spacer(),
-                  Form(
-                    key: _formKey,
-                    child: Column(children: [
-                      InputField(hint: 'Email'),
-                      const SizedBox(height: 20),
-                      InputField(hint: 'Password', obscure: true)
-                    ]),
-                  ),
-                  const Spacer(),
-                  GetBuilder<AuthController>(builder: (_auth) {
-                    return InkWell(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          _auth.registerWithEmailAndPassword(
-                              _auth.email.value, _auth.password.value);
-                        }
-                      },
-                      child: Buttons(
-                        fillColor: kPrimaryColor,
-                        child: Center(
-                            child: Text('Register Account',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 25))),
-                      ),
-                    );
-                  }),
-                  const Spacer(flex: 3),
-                  Buttons(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/images/Logo.png'),
-                          const SizedBox(width: 10),
-                          Text('Register with Gmail',
-                              style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 22))
-                        ]),
-                    borderColor: kPrimaryColor,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Already have an Account? ',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700)),
-                      TextButton(
+                child: Form(
+                  key: _sFormKey,
+                  child: Column(children: [
+                    const Spacer(flex: 2),
+                    InputField(hint: 'Email'),
+                    const SizedBox(height: 20),
+                    InputField(hint: 'Password', obscure: true),
+                    const Spacer(),
+                    GetBuilder<AuthController>(builder: (_auth) {
+                      return ElevatedButton(
                         onPressed: () {
-                          Get.to(() => SignInPage());
+                          if (_sFormKey.currentState!.validate()) {
+                            _auth.signInWithEmailAndPassword(
+                                _auth.email.value, _auth.password.value);
+                          }
                         },
-                        child: Text('Login in',
+                        child: Text('Log In',
                             style: TextStyle(
-                                color: Colors.grey.shade800,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 25)),
+                        style: TextButton.styleFrom(
+                            backgroundColor: kPrimaryColor,
+                            minimumSize:
+                                Size(getProportionateScreenWidth(310), 45),
+                            elevation: 0),
+                      );
+                    }),
+                    const Spacer(flex: 3),
+                    Buttons(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/images/Logo.png'),
+                            const SizedBox(width: 10),
+                            Text('Register with Gmail',
+                                style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 22))
+                          ]),
+                      borderColor: kPrimaryColor,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Already have an Account? ',
+                            style: TextStyle(
+                                color: Colors.grey,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w800)),
-                      ),
-                    ],
-                  ),
-                  const Spacer()
-                ]),
+                                fontWeight: FontWeight.w700)),
+                        TextButton(
+                          onPressed: () {
+                            Get.to(() => SignInPage());
+                          },
+                          child: Text('Login in',
+                              style: TextStyle(
+                                  color: Colors.grey.shade800,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800)),
+                        ),
+                      ],
+                    ),
+                    const Spacer()
+                  ]),
+                ),
               ),
             ),
           ),

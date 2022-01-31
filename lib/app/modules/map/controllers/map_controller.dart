@@ -5,8 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapController extends GetxController {
   /// Determine the current position of the device.
-  ///
-  /// I maked some variable static so that they will visible from other pages
 
   final Rx<LatLng> location = LatLng(0, 0).obs;
   final Rx<Position> userPosition = Position(
@@ -19,8 +17,6 @@ class MapController extends GetxController {
           speed: 0,
           speedAccuracy: 0)
       .obs;
-  // final Rx<CameraPosition> userLocation =
-  //     CameraPosition(target: location.value).obs;
 
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
